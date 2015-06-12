@@ -1,0 +1,72 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+body{
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background:#FBFBFF;
+  border-top: solid thin #4668A6;
+  border-top-width: 2px;
+  padding-top:20px;
+}
+.footer a {
+	background:#FBFBFF!important;
+	color:blue!important;
+}
+
+body > .container {
+  padding: 60px 15px 0;
+}
+.img-responsive {
+	max-height:65px;
+	padding-right:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+.navbar-default {
+	background: #FBFBFF;
+  	border-bottom: solid thin #4668A6;
+	border-bottom-width: 2px;
+}
+.navbar-header {
+	background:#FBFBFF;
+}
+#navbar {
+	background:#FBFBFF;
+}
+.navbar-nav > li > a{  
+	line-height: 65px;
+	height: 65px;
+ 	padding-top: 0;}
+#navbar a {
+	background:#FBFBFF;
+	color:blue;	
+}
+#navbar a:hover {
+	background:#4668A6;
+	color:white;
+}
+.navbar-toggle .collapsed {
+	background:#FBFBFF;
+	color: blue;
+}
+#active a  {
+	background:#4668A6;
+	color:white;
+}
+
+.table th{background-color:#d3e9ff;color:black!important}
+.table tr{background-color:white;color:black!important}
+
+tr:hover td{
+  background-color:AliceBlue ;
+}
+.btn.btn-link {padding:0px;float:left;}
+
+.input_table {max-width: 600px;}

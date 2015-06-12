@@ -1,0 +1,72 @@
+===============================================================================
+Cloudbase Developer's Manual
+===============================================================================
+
+///////////////////////////////////////
+// PHP Script Format:
+
+Cloudbase is programmed in PHP with the primary pages residing in root Cloudbase
+directory. Other PHP scripts are located in the "php" subdirectory. These
+scripts are named as follows:
+	
+	<page where script appears>_<script function>_.php
+
+For example, a script appearing on the "Aircraft" page that displays a table of
+aircraft will be named:
+
+	aircraft_create_table.php
+
+The typical scipts found on most pages and their functions are:
+
+	database_access.php //Creates functions for opening and closing database
+			    //connections. Found on most pages
+
+	authenticate.php    //Authenticates the user and redirects to the login
+			    //page on authentication failure. Found on most
+			    //pages
+
+	<page name>_message.php //Checks whether all required fields have been
+				//entered and triggers a failure message if
+				// a required field has not been entered
+
+	<page name>_update.php  //Adds updates or deletes data from the database
+				//related to this page
+
+	<page name>_get_<name>.php //Retrieves data from the database necessary
+				   //to populate a table
+
+	<page name>_create_table.php //Creates a table with dynamic data related
+				     //to the scripts name
+
+	menu.php	//Contains the main menu
+
+///////////////////////////////////////
+// CSS / HTML Styling
+
+All CSS files are located in the "css" folder
+
+The only CSS file that was modified beyond the default bootstrap files is
+called:
+	
+	extrastyle.css
+
+All required CSS and javascript files are included in the script:
+
+	meta_include.php
+
+The file "footer.html" contains all required information to generate the footer
+on each page
+
+///////////////////////////////////////
+// Included Libraries
+
+Cloudbase utilizes the folowing libraries:
+
+	Bootstrap //Responsive CSS and javascript framework
+
+	JQueryUI  //Required by Bootstrap
+
+	PickaDate //Timepicker JQuery plugin
+
+	DataTables //A javascript library used to dynamically display and sort
+		   //report results

@@ -1,0 +1,55 @@
+===============================================================================
+Cloudbase Installation Manual
+===============================================================================
+
+This manual assumes a knowledge of MySQL. If you are not comfortable with the 
+command line I highly recommend installing phpMyAdmin on your server in order
+to use a GUI.
+
+///////////////////////////////////////
+// Prerequisites:
+
+A working webserver with...
+1) Linux Kernel version 2.6+
+2) Apache version 2.2.29+
+3) MySQL version 5.6+
+4) PHP version 5.6.5+
+
+If you are hosting Cloudbase on a local network and need help setting up a 
+web server please visit:
+
+https://youtu.be/SKJ55ebMcOc
+
+...for a comprehensive tutorial
+
+///////////////////////////////////////
+// Installation
+
+1) Create a new database user with all priveleges on a new database
+2) Unzip files in the root directory of your web server
+3) Open "php/sql_details.php
+4) Insert your username, password, database, and host in the appropriate fields
+	
+	for example:
+	
+	$sql_details = array(
+  		'user' => 'dbusername',
+  		'pass' => 'dbpasswd',
+  		'db'   => 'cloudbase',
+  		'host' => 'localhost'
+	);
+5) Import the file "install/install.sql" into your database for a short 
+   tutorial on how to accomplish this using phpmyadmin please visit:
+   https://youtu.be/jW5lrS6EUPM
+6) Open a web browser and navigate to your web server (or the subdirectory
+   where you unzipped the files)
+7) Login with the username "admin" and password "cloudbase"
+
+///////////////////////////////////////
+// Refer to the user manual in order to accomplish tasks 8, 9 and 10
+
+8) Click on "My Account" and create all necessary users
+9) Click on "Pilots" and begin creating pilots
+10) Click on "Aircraft" and begin creating aircraft
+
+You are now ready to begin creating flightsheets on the "Flightsheets" page!
