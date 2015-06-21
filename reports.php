@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-	<? include 'meta_include.html'; ?>  
+	<?php include 'meta_include.html'; ?>  
 </head>
 
 <body>

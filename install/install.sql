@@ -272,70 +272,6 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`user_id`, `user_uname`, `user_fname`, `user_mname`, `user_lname`, `user_hashedpwd`, `user_salt`, `user_admin`, `user_email`, `user_active`) VALUES
 (4, 'admin', 'Admin', 'A', 'Admin', 'd8cbf48d119ff771bb4aa1778c5d7e52', 235003918, 1, 'test@test.com', 1);
 
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `view_flights`
---
-CREATE TABLE IF NOT EXISTS `view_flights` (
-`flight_id` int(15)
-,`svc_date` date
-,`plane_serial` varchar(16)
-,`plane_type` varchar(32)
-,`flight_takeoff` time
-,`flight_landing` time
-,`duration` time
-,`svc_cost` bigint(15)
-);
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `view_flightsheets`
---
-CREATE TABLE IF NOT EXISTS `view_flightsheets` (
-`svc_date` date
-,`flight_takeoff` time
-,`flight_landing` time
-,`duration` time
-,`plane_serial` varchar(16)
-,`pilot` varchar(66)
-,`svc_cost` varchar(67)
-);
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `view_pilots`
---
-CREATE TABLE IF NOT EXISTS `view_pilots` (
-`flight_id` int(15)
-,`pilot` varchar(66)
-);
--- --------------------------------------------------------
-
---
--- Structure for view `view_flights`
---
-DROP TABLE IF EXISTS `view_flights`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`camba063`@`localhost` SQL SECURITY DEFINER VIEW `view_flights` AS select `flight`.`flight_id` AS `flight_id`,`service`.`svc_date` AS `svc_date`,`plane`.`plane_serial` AS `plane_serial`,`plane`.`plane_type` AS `plane_type`,`flight`.`flight_takeoff` AS `flight_takeoff`,`flight`.`flight_landing` AS `flight_landing`,(select timediff(`flight`.`flight_landing`,`flight`.`flight_takeoff`)) AS `duration`,(select if((`plane`.`plane_type` = 'tow'),(`service`.`svc_cost` = NULL),`service`.`svc_cost`)) AS `svc_cost` from ((`service` join `flight`) join `plane`) where ((`service`.`svc_id` = `flight`.`svc_id`) and (`flight`.`plane_id` = `plane`.`plane_id`) and (`flight`.`flight_landing` <> '00:00:00'));
-
--- --------------------------------------------------------
-
---
--- Structure for view `view_flightsheets`
---
-DROP TABLE IF EXISTS `view_flightsheets`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`camba063`@`localhost` SQL SECURITY DEFINER VIEW `view_flightsheets` AS select `view_flights`.`svc_date` AS `svc_date`,`view_flights`.`flight_takeoff` AS `flight_takeoff`,`view_flights`.`flight_landing` AS `flight_landing`,`view_flights`.`duration` AS `duration`,`view_flights`.`plane_serial` AS `plane_serial`,`view_pilots`.`pilot` AS `pilot`,concat('$',format((`view_flights`.`svc_cost` / 100),2)) AS `svc_cost` from (`view_flights` left join `view_pilots` on((`view_flights`.`flight_id` = `view_pilots`.`flight_id`)));
-
--- --------------------------------------------------------
-
---
--- Structure for view `view_pilots`
---
-DROP TABLE IF EXISTS `view_pilots`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`camba063`@`localhost` SQL SECURITY DEFINER VIEW `view_pilots` AS select `flight_role`.`flight_id` AS `flight_id`,concat_ws(', ',`person`.`person_lname`,`person`.`person_fname`) AS `pilot` from (`person` join `flight_role`) where (`person`.`person_id` = `flight_role`.`role_id`);
 
 --
 -- Constraints for dumped tables
@@ -405,3 +341,23 @@ ALTER TABLE `soar`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+create view view_flights as
+select flight_id, svc_date, plane_serial, plane_type, 
+flight_takeoff, flight_landing,
+(select timediff(flight_landing, flight_takeoff)) as duration, 
+(select if(plane_type="tow", svc_cost=null, svc_cost) 
+) as svc_cost
+from service, flight, plane  
+where service.svc_id = flight.svc_id and 
+      flight.plane_id = plane.plane_id and
+      flight.flight_landing != "00:00:00";
+create view view_pilots as
+select flight_id, concat_ws(", ", person_lname, person_fname) as pilot 
+from person, flight_role
+where person.person_id = flight_role.role_id;
+create view view_flightsheets as
+select svc_date, flight_takeoff, flight_landing, duration, plane_serial, 
+pilot, concat("$" , format(svc_cost/100, 2)) as svc_cost
+from view_flights left outer join view_pilots
+on view_flights.flight_id=view_pilots.flight_id; 
+
